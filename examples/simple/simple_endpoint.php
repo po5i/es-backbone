@@ -1,17 +1,43 @@
 <?php
 //TODO: Need includes for Elastica (php library: https://github.com/ruflin/Elastica/)
+include "/var/www/Elastica/Client.php";
+include "/var/www/Elastica/Exception/ExceptionInterface.php";
+include "/var/www/Elastica/Exception/ResponseException.php";
+include "/var/www/Elastica/Exception/InvalidException.php";
+include "/var/www/Elastica/Util.php";
+include "/var/www/Elastica/Response.php";
+include "/var/www/Elastica/Result.php";
+include "/var/www/Elastica/ResultSet.php";
+include "/var/www/Elastica/Param.php";
+include "/var/www/Elastica/Query.php";
+include "/var/www/Elastica/Connection.php";
+include "/var/www/Elastica/SearchableInterface.php";
+include "/var/www/Elastica/Type.php";
+include "/var/www/Elastica/Request.php";
+include "/var/www/Elastica/Search.php";
+include "/var/www/Elastica/Index.php";
+include "/var/www/Elastica/Transport/AbstractTransport.php";
+include "/var/www/Elastica/Transport/Http.php";
 
 //TODO: define array of ES servers
 global $es_servers;
+$es_servers = array(
+					    'servers' => array(
+					        array('host' => '200.126.23.173', 'port' => 9200)
+					    )
+					);
 
 //OPTIONAL: only allow a whitelist of particular indices and particular fields within those indices
 //  also defines highlighting and which fields to return.
-$whitelist_idx = array( 
-	'index/type' => array( 'highlight' => array( 'content' => array( 'fragment_size' => '50', 'number_of_fragments' => 3 ) ), 'fields' => array( 'title', 'content', 'author', 'tag' ) ),
-);
+/*$whitelist_idx = array( 
+	'index/type' => array( 
+							'highlight' => array( 'title' => array( 'fragment_size' => '50', 'number_of_fragments' => 3 ) ), 
+							'fields' => array( 'title', 'language', 'context', 'format' ) 
+						),
+);*/
 
 if ( empty( $_REQUEST['query'] ) || empty( $_REQUEST['idx'] ) || empty( $_REQUEST['type'] ) ) {
-	status_header( 400 ); //improper request
+	header("HTTP/1.0 400 Bad Request"); //improper request
 	die;
 }
 
@@ -25,13 +51,13 @@ if ( '' !== $type )
 
 //OPTIONAL: uncomment to enable whitelisting
 //if ( ! in_array( $idx_type, array_keys( $whitelist_idx ) ) ) {
-//	status_header( 403 ); //forbidden
+//	header("HTTP/1.0 403 Forbidden"); //forbidden
 //	die;
 //}
 
 try{
-	$esclient = new Elastica_Client( array( 'servers' => $es_servers ) );
-	$esQ = new Elastica_Query();
+	$esclient = new \Elastica\Client( array( 'servers' => $es_servers ) );
+	$esQ = new \Elastica\Query();
 	$esQ->setRawQuery( get_object_vars( json_decode( $query ) ) );
 	if ( isset( $whitelist_idx[ $idx_type ] ) ) {
 		$esQ->setHighlight( array( 'fields' => $whitelist_idx[ $idx_type ][ 'highlight' ], 
@@ -49,6 +75,6 @@ try{
 }
 catch ( Exception $e ){
 	error_log( $e->getMessage() );
-	status_header( 500 ); //server error
+	header("HTTP/1.0 500 Server Error"); //server error
 	echo json_encode( array( 'error' => 'query_error: ' . $e->getMessage() ) );
 }

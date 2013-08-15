@@ -12,11 +12,13 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div id="{{prefix}}-date-range"></div>\
 		</div>\
 		<div id="{{prefix}}-left-col">\
-			<h3>Authors</h3><div id="{{prefix}}-author-pie" class="esbb-pie"></div>\
-			<div id="{{prefix}}-tag-selector"></div>\
+			<div id="{{prefix}}-context-selector"></div>\
+			<div id="{{prefix}}-language-selector"></div>\
+			<div id="{{prefix}}-dataset-selector"></div>\
+			<div id="{{prefix}}-format-selector"></div>\
 		</div>\
 		<div id="{{prefix}}-center-col">\
-			<div id="{{prefix}}-timeline" class="esbb-timeline"></div>\
+			<div id="{{prefix}}-timeline" class="esbb-timeline" style="display:none"></div>\
 			<div id="{{prefix}}-search-results"></div>\
 		</div>\
 		<div id="{{prefix}}-right-col">\
@@ -29,10 +31,17 @@ var esbbSimpleAppView = Backbone.View.extend({
 		<h3>{{header}} [{{number}}/{{total}}]</h3>\
 		{{#hits}}\
 		<p class="esbb-result"> \
-			<span class="esbb-result-title">{{fields.title}}<span>\
-			{{highlight.content}}<br \>\
-			<span class="esbb-result-name">{{fields.author}}</span>\
-			- <span class="esbb-result-date">{{fields.date}}</span>\
+			<h4>{{_source.title}}</h4>\
+			<div><a href="{{_source.location}}" target="_blank">{{_source.location}}</a></div>\
+			<div>Context: {{_source.context}}</div>\
+			<div>Format: {{_source.format}}</div>\
+			<div>Language: {{_source.language}}</div>\
+			<div>Authors:</div>\
+			<ul>\
+			{{#_source.authors}}\
+				<li>{{name}}</li>\
+			{{/_source.authors}}\
+			</ul>\
 		</p>\
 		{{/hits}}\
 		',
@@ -52,43 +61,43 @@ var esbbSimpleAppView = Backbone.View.extend({
 		//  Also don't forget to change your facetName where appropriate
 		new esbbSearchURLView( { 
 			model: this.query,
-			baseURL: 'http://TODO_URL',
+			baseURL: 'http://localhost:9200/aginfra/_search',
 			el: '#' + this.options.id_prefix + '-search-url',
 		} );
 		new esbbSearchBarView( { 
 			model: this.query,
 			el: '#' + this.options.id_prefix + '-search-bar',
-			headerName: 'Simple Search'
+			headerName: 'Simple Search:'
 		} );
 		new esbbSearchFilterSelectView( { 
 			model: this.query, 
 			el: '#' + this.options.id_prefix + '-search-filters',
 			//TODO: fields that will appear in autocomplete (full syntax is "author:gibrown", so this is really just a hit to the user
-			avail_fields: [ 'title:', 'content:', 'author:', 'tag:' ]
+			avail_fields: [ 'context:other', 'language:es','language:en','language:hu', 'format:', 'dataset:' ]
 		} );
-		new esbbSearchDateRangePickerView( { 
+		/*new esbbSearchDateRangePickerView( { 
 			model: this.query,
 			el: '#' + this.options.id_prefix + '-date-range',
 			headerName: 'Date Range',
 			facetName: 'date'
-		} );
+		} );*/
 
 		//TODO: instantiate the desired center column elements and connect to the proper element ids
-		new esbbSearchFacetTimelineView( { 
+		/*new esbbSearchFacetTimelineView( { 
 			facetName: 'date',
 			el: '#' + this.options.id_prefix + '-timeline',
 			model: this.model,
 			searchQueryModel: this.query
-		} );
+		} );*/
 		new esbbSearchResultsView( { 
 			model: this.model, 
 			template: this.templateResults,
 			el: '#' + this.options.id_prefix + '-search-results' ,
-			highlightField: 'content' //TODO: set to whatever your highlighted field name is
+			highlightField: 'title' //TODO: set to whatever your highlighted field name is
 		} );
 
 		//TODO: instantiate the desired left column elements and connect to the proper element ids
-		new esbbSearchFacetPieView( { 
+		/*new esbbSearchFacetPieView( { 
 			facetName: 'author',
 			el: '#' + this.options.id_prefix + '-author-pie',
 			model: this.model,
@@ -98,6 +107,34 @@ var esbbSimpleAppView = Backbone.View.extend({
 			facetName: 'tag',
 			headerName: 'Tags',
 			el: '#' + this.options.id_prefix + '-tag-selector',
+			searchQueryModel: this.query,
+			model: this.model
+		} );*/
+		new esbbSearchFacetSelectView( { 
+			facetName: 'language',
+			headerName: 'Language',
+			el: '#' + this.options.id_prefix + '-language-selector',
+			searchQueryModel: this.query,
+			model: this.model
+		} );
+		new esbbSearchFacetSelectView( { 
+			facetName: 'context',
+			headerName: 'Context',
+			el: '#' + this.options.id_prefix + '-context-selector',
+			searchQueryModel: this.query,
+			model: this.model
+		} );
+		new esbbSearchFacetSelectView( { 
+			facetName: 'format',
+			headerName: 'Format',
+			el: '#' + this.options.id_prefix + '-format-selector',
+			searchQueryModel: this.query,
+			model: this.model
+		} );
+		new esbbSearchFacetSelectView( { 
+			facetName: 'dataset',
+			headerName: 'Dataset',
+			el: '#' + this.options.id_prefix + '-dataset-selector',
 			searchQueryModel: this.query,
 			model: this.model
 		} );

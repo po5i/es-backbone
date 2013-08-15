@@ -288,6 +288,7 @@ var esbbSearchResultsView = Backbone.View.extend({
 				}
 			}
 			var data = this.default_data;
+			data.number = results.hits.hits.length;
 			data.header = this.header;
 			data.hits = results.hits.hits;
 			data.total = results.hits.total;
@@ -719,7 +720,7 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 	select_$el: null,
 	avail_fields: [],
 	template: '\
-			<p>Filters:\
+			<p><label>Filters:</label>\
 			<input type="hidden" id="{{input_el_id}}" value="">\
 			</p>\
 			<p class="esbb-filter-sel-error" style="display:none; color:red"></p>\
@@ -797,6 +798,7 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 			//we can just overwrite all the query term filters
 			t.model.setAllTermFilters( kv );
 			t.model.trigger( 'change' );
+			t.model.search();
 		} );
 	},
 
@@ -962,7 +964,7 @@ var esbbSearchBarView = Backbone.View.extend({
 	buttonText: 'Search',
 	spinner: null,
 	spin_it: false,
-	template: '<p>{{headerName}}<input class="esbb-search-query" type="text" style="width=500px;"  /><a href="" class="esbb-search-button">{{buttonText}}</a></p>',
+	template: '<p><label>{{headerName}}</label><input class="esbb-search-query" type="text" style="width=500px;"  /><a href="" class="esbb-search-button">{{buttonText}}</a></p>',
 
 	events : {
 		'click .esbb-search-button' : 'search',
