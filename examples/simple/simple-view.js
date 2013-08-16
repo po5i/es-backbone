@@ -19,6 +19,8 @@ var esbbSimpleAppView = Backbone.View.extend({
 		</div>\
 		<div id="{{prefix}}-center-col">\
 			<div id="{{prefix}}-timeline" class="esbb-timeline" style="display:none"></div>\
+			<div id="{{prefix}}-sort"></div>\
+			<div id="{{prefix}}-navigation"></div>\
 			<div id="{{prefix}}-search-results"></div>\
 		</div>\
 		<div id="{{prefix}}-right-col">\
@@ -94,6 +96,19 @@ var esbbSimpleAppView = Backbone.View.extend({
 			template: this.templateResults,
 			el: '#' + this.options.id_prefix + '-search-results' ,
 			highlightField: 'title' //TODO: set to whatever your highlighted field name is
+		} );
+
+		new esbbSortView( {
+			model: this.query, 
+			el: '#' + this.options.id_prefix + '-sort' ,
+			headerName: 'Sort | ',
+			sorts: [ {name: 'title', data: 'title'} ]
+		} );
+
+		new esbbNavigationView( {
+			model: this.query, 
+			el: '#' + this.options.id_prefix + '-navigation' ,
+			headerName: 'Navigate | ',
 		} );
 
 		//TODO: instantiate the desired left column elements and connect to the proper element ids

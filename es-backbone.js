@@ -67,6 +67,28 @@ var esbbSearchQueryModel = Backbone.Model.extend({
 		return curr.sort;
 	},
 
+	setFrom: function( from ) {
+		var curr = this.toJSON();
+		curr.from = from;
+		this.set( curr, { silent: true } );
+	},
+
+	getFrom: function() {
+		var curr = this.toJSON();
+		return curr.from;
+	},
+
+	setSize: function( size ) {
+		var curr = this.toJSON();
+		curr.size = size;
+		this.set( curr, { silent: true } );
+	},
+
+	getSize: function() {
+		var curr = this.toJSON();
+		return curr.size;
+	},
+
 	setDateHistInterval: function( facet_name, interval ) {
 		var curr = this.toJSON();
 		curr.facets[facet_name].date_histogram.interval = interval;
@@ -709,6 +731,7 @@ var esbbSearchFacetSelectView = Backbone.View.extend({
 	select: function( ev ) {
 		ev.preventDefault();
 		this.searchQueryModel.addTermFilter( this.facetName, $( ev.currentTarget ).attr('href') );
+		this.searchQueryModel.setFrom(0);
 		this.searchQueryModel.trigger('change');
 		this.searchQueryModel.search( this.model );
 	} 
@@ -797,6 +820,7 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 			//since this should always have all the latest term filters, 
 			//we can just overwrite all the query term filters
 			t.model.setAllTermFilters( kv );
+			t.model.setFrom(0);
 			t.model.trigger( 'change' );
 			t.model.search();
 		} );
@@ -853,12 +877,14 @@ var esbbSearchDateRangePickerView = Backbone.View.extend({
 
 		t.start_picker.change( function () {
 			t.setRangeFilter();
+			t.model.setFrom(0);
 			t.model.trigger( 'change' );
 			t.model.search();
 		} );
 
 		t.end_picker.change( function () {
 			t.setRangeFilter();
+			t.model.setFrom(0);
 			t.model.trigger( 'change' );
 			t.model.search();
 		} );
@@ -951,6 +977,7 @@ var esbbSearchFilterTermsSelectorView = Backbone.View.extend({
 			//since this should always have all the latest term filters, 
 			//we can just overwrite all the query term filters
 			t.model.setTermFilters( t.facetName, kv );
+			t.model.setFrom(0);
 			t.model.trigger( 'change' );
 			t.model.search();
 		} );
@@ -1001,6 +1028,7 @@ var esbbSearchBarView = Backbone.View.extend({
 			ev.preventDefault();
 			this.setQuery( null );
 		}
+		this.model.setFrom(0);
 		this.model.search();
 	},
 
@@ -1108,6 +1136,58 @@ var esbbSortView = Backbone.View.extend({
 				t.model.setSort( t.sorts[idx].data );
 				t.model.trigger('change');
 				t.model.search();
+			}
+			return false;
+		});
+
+	}
+
+});
+
+
+var esbbNavigationView = Backbone.View.extend({
+	headerName: 'Navigate | ',
+
+	initialize: function() {
+		var t = this;
+		if ( this.options.headerName )
+			this.headerName = this.options.headerName;
+		//this.sorts = this.options.sorts;
+		
+
+		_.bindAll( this, 'render' );
+		this.model.bind('change', this.render, this );
+		this.render();
+	},
+	
+	render: function( note ) {
+		var t = this;
+		this.$el.empty();
+
+		var from = this.model.getFrom();
+		var size = this.model.getSize();
+		console.log(from);
+		var html = this.headerName + ' ';
+		html += '<a class="esbb-nav-previous" href="">Previous</a> ';
+		html += '<a class="esbb-nav-next" href="">Next</a> ';
+
+		this.$el.append( Mustache.render( html ) );
+
+		this.$el.find( "a.esbb-nav-next" ).click( function ( e ) {
+			var new_from = from + size;	//TODO: validate against total number of results
+			t.model.setFrom(new_from);
+			t.model.trigger('change');
+			t.model.search();
+			return false;
+		});
+
+		this.$el.find( "a.esbb-nav-previous" ).click( function ( e ) {
+			var new_from = from - size;
+			if(new_from >= 0) {
+				t.model.setFrom(new_from);
+				t.model.trigger('change');
+				t.model.search();
+				return false;
 			}
 			return false;
 		});

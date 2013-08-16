@@ -1,9 +1,12 @@
 <?php
 //TODO: Need includes for Elastica (php library: https://github.com/ruflin/Elastica/)
-include "/var/www/Elastica/Client.php";
 include "/var/www/Elastica/Exception/ExceptionInterface.php";
+include "/var/www/Elastica/Exception/ClientException.php";
+include "/var/www/Elastica/Client.php";
 include "/var/www/Elastica/Exception/ResponseException.php";
 include "/var/www/Elastica/Exception/InvalidException.php";
+include "/var/www/Elastica/Exception/ConnectionException.php";
+include "/var/www/Elastica/Exception/Connection/HttpException.php";
 include "/var/www/Elastica/Util.php";
 include "/var/www/Elastica/Response.php";
 include "/var/www/Elastica/Result.php";
@@ -23,7 +26,8 @@ include "/var/www/Elastica/Transport/Http.php";
 global $es_servers;
 $es_servers = array(
 					    'servers' => array(
-					        array('host' => '200.126.23.173', 'port' => 9200)
+					        //array('host' => '200.126.23.173', 'port' => 9200)
+					        array('host' => 'localhost', 'port' => 9200)
 					    )
 					);
 
