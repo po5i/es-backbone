@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="css/simple.css?m=2012-06-18" />
 <link rel="stylesheet" href="../../js/jquery-ui-1.8.21.custom.css" />
 <link rel="stylesheet" href="../../js/select2.css" />
+<link rel="stylesheet" href="css/accordionmenu.css" type="text/css" media="screen" />
 
 <!-- Load JS libraries -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -44,7 +45,7 @@ var esbbSimpleSearchQuery = new esbbSearchQueryModel( {
 		filtered : {
 			query : { 
 				query_string: {
-					fields: [ "title" ],	//"content", "title", "tag"
+					fields: [ "aginfra_eu.lom_general_title_string_type.value" ],	//"content", "title", "tag"
 					query: "",
 					default_operator: "AND"
 			} },
@@ -53,28 +54,28 @@ var esbbSimpleSearchQuery = new esbbSearchQueryModel( {
 			}
 	} },
 	facets : {
-		language : {
+		"aginfra_eu.lom_general_language_type.value" : {
 			terms : {
-				field : "language",
-				"size" : 20
+				field : "aginfra_eu.lom_general_language_type.value",
+				size : 20
 			}
 		},
-		context : {
+		"aginfra_eu.lom_educational_context_value_type.value" : {
 			terms : {
-				field : "context",
-				"size" : 20
+				field : "aginfra_eu.lom_educational_context_value_type.value",
+				size : 20
 			}
 		},
-		format : {
+		"aginfra_eu.lom_technical_format_type.value" : {
 			terms : {
-				field    : "format",
-				"size" : 20
+				field    : "aginfra_eu.lom_technical_format_type.value",
+				size : 20
 			}
 		},
-		dataset : {
+		"aginfra_eu.dataset.value" : {
 			terms : {
-				field    : "dataset",
-				"size" : 20
+				field    : "aginfra_eu.dataset.value",
+				size : 20
 			}
 		}
 	}
@@ -82,9 +83,9 @@ var esbbSimpleSearchQuery = new esbbSearchQueryModel( {
 esbbSimpleSearchQuery.resultsModel = esbbSimpleSearchResults;
 
 //TODO: define the url for your ES endpoint, index name, and doc type name
-esbbSimpleSearchQuery.ajax_url = 'http://localhost/es-backbone/examples/simple/simple_endpoint.php';
-esbbSimpleSearchQuery.index = 'aginfra';
-esbbSimpleSearchQuery.index_type = 'aginfra';
+esbbSimpleSearchQuery.ajax_url = 'http://localhost/aginfra/es-backbone/examples/simple/simple_endpoint.php';
+esbbSimpleSearchQuery.index = 'aginfra_ds';
+esbbSimpleSearchQuery.index_type = 'aginfra_ds';
 
 	var esbbSimpleApp = new esbbSimpleAppView( { 
 		model: esbbSimpleSearchResults, 
@@ -98,7 +99,35 @@ esbbSimpleSearchQuery.index_type = 'aginfra';
 
 </script>
 
-<div id='esbb-simple-app'></div>
+<style type="text/css">#wrapper-menu{width:330px;margin:0 auto;}</style>
+
+<div id='esbb-simple-app'></div>	
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		// Store variables
+		var accordion_head = $('.accordion > li > a'),
+			accordion_body = $('.accordion li > .sub-menu');
+
+		// Open the first tab on load
+		accordion_head.first().addClass('active').next().slideDown('normal');
+
+		// Click function
+		accordion_head.on('click', function(event) {
+			
+			// Disable header links
+			event.preventDefault();
+
+			// Show and hide the tabs on click
+			if ($(this).attr('class') != 'active'){
+				accordion_body.slideUp('normal');
+				$(this).next().stop(true,true).slideToggle('normal');
+				accordion_head.removeClass('active');
+				$(this).addClass('active');
+			}
+		});
+	});
+</script>
 
 </body>
 </html>

@@ -12,14 +12,28 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div id="{{prefix}}-date-range"></div>\
 		</div>\
 		<div id="{{prefix}}-left-col">\
-			<div id="{{prefix}}-context-selector"></div>\
-			<div id="{{prefix}}-language-selector"></div>\
-			<div id="{{prefix}}-dataset-selector"></div>\
-			<div id="{{prefix}}-format-selector"></div>\
+			<ul class="accordion">\
+				<li class="files">\
+					<a href="#">Context<span>100%</span></a>\
+					<ul class="sub-menu" id="{{prefix}}-context-selector"></ul>\
+				</li>\
+				<li class="mail">\
+					<a href="#">Language<span>100%</span></a>\
+					<ul class="sub-menu" id="{{prefix}}-language-selector"></ul>\
+				</li>\
+				<li class="cloud">\
+					<a href="#">Dataset<span>100%</span></a>\
+					<ul class="sub-menu" id="{{prefix}}-dataset-selector"></ul>\
+				</li>\
+				<li class="sign">\
+					<a href="#">Format<span>100%</span></a>\
+					<ul class="sub-menu" id="{{prefix}}-format-selector"></ul>\
+				</li>\
+			</ul>\
 		</div>\
 		<div id="{{prefix}}-center-col">\
 			<div id="{{prefix}}-timeline" class="esbb-timeline" style="display:none"></div>\
-			<div id="{{prefix}}-sort"></div>\
+			<div style="display:none" id="{{prefix}}-sort"></div>\
 			<div id="{{prefix}}-navigation"></div>\
 			<div id="{{prefix}}-search-results"></div>\
 		</div>\
@@ -32,19 +46,39 @@ var esbbSimpleAppView = Backbone.View.extend({
 	templateResults: '\
 		<h3>{{header}} [{{number}}/{{total}}]</h3>\
 		{{#hits}}\
-		<p class="esbb-result"> \
-			<h4>{{_source.title}}</h4>\
-			<div><a href="{{_source.location}}" target="_blank">{{_source.location}}</a></div>\
-			<div>Context: {{_source.context}}</div>\
-			<div>Format: {{_source.format}}</div>\
-			<div>Language: {{_source.language}}</div>\
-			<div>Authors:</div>\
-			<ul>\
-			{{#_source.authors}}\
-				<li>{{name}}</li>\
-			{{/_source.authors}}\
+		<div class="esbb-result"> \
+			{{#_source.aginfra_eu.lom_general_title_string_type}}\
+				<h4>{{value}}</h4>\
+			{{/_source.aginfra_eu.lom_general_title_string_type}}\
+			\
+			{{#_source.aginfra_eu.lom_technical_location_type}}\
+				<div><a href="{{value}}" target="_blank">{{value}}</a> <img src="img/download.png"></div>\
+			{{/_source.aginfra_eu.lom_technical_location_type}}\
+			<div>Context:</div>\
+			<ul class="facets-results">\
+				{{#_source.aginfra_eu.lom_educational_context_value_type}}\
+					<li>{{value}}</li>\
+				{{/_source.aginfra_eu.lom_educational_context_value_type}}\
 			</ul>\
-		</p>\
+			<div>Format:</div>\
+			<ul class="facets-results">\
+				{{#_source.aginfra_eu.lom_technical_format_type}}\
+					<li>{{value}}</li>\
+				{{/_source.aginfra_eu.lom_technical_format_type}}\
+			</ul>\
+			<div>Language:</div>\
+			<ul class="facets-results">\
+				{{#_source.aginfra_eu.lom_general_language_type}}\
+					<li><img src="img/flags/{{value}}.png"></li>\
+				{{/_source.aginfra_eu.lom_general_language_type}}\
+			</ul>\
+			<div>Authors:</div>\
+			<ul class="facets-results">\
+				{{#_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
+					<li><a href="http://localhost/aginfra/snv/snv.php?center={{value}}" target="_blank">{{value}}</a></li>\
+				{{/_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
+			</ul>\
+		</div>\
 		{{/hits}}\
 		',
 
@@ -126,33 +160,78 @@ var esbbSimpleAppView = Backbone.View.extend({
 			model: this.model
 		} );*/
 		new esbbSearchFacetSelectView( { 
-			facetName: 'language',
+			facetName: 'aginfra_eu.lom_general_language_type.value',
 			headerName: 'Language',
 			el: '#' + this.options.id_prefix + '-language-selector',
 			searchQueryModel: this.query,
-			model: this.model
+			model: this.model,
+			template: '\
+				{{#items}}\
+					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
+				{{/items}}\
+				{{^items}}\
+					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
+				{{/items}}\
+				',
+			templateNoResults: '\
+					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
+				',
 		} );
 		new esbbSearchFacetSelectView( { 
-			facetName: 'context',
+			facetName: 'aginfra_eu.lom_educational_context_value_type.value',
 			headerName: 'Context',
 			el: '#' + this.options.id_prefix + '-context-selector',
 			searchQueryModel: this.query,
-			model: this.model
+			model: this.model,
+			template: '\
+				{{#items}}\
+					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
+				{{/items}}\
+				{{^items}}\
+					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
+				{{/items}}\
+				',
+			templateNoResults: '\
+					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
+				',
 		} );
 		new esbbSearchFacetSelectView( { 
-			facetName: 'format',
+			facetName: 'aginfra_eu.lom_technical_format_type.value',
 			headerName: 'Format',
 			el: '#' + this.options.id_prefix + '-format-selector',
 			searchQueryModel: this.query,
-			model: this.model
+			model: this.model,
+			template: '\
+				{{#items}}\
+					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
+				{{/items}}\
+				{{^items}}\
+					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
+				{{/items}}\
+				',
+			templateNoResults: '\
+					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
+				',
 		} );
 		new esbbSearchFacetSelectView( { 
-			facetName: 'dataset',
+			facetName: 'aginfra_eu.dataset.value',
 			headerName: 'Dataset',
 			el: '#' + this.options.id_prefix + '-dataset-selector',
 			searchQueryModel: this.query,
-			model: this.model
+			model: this.model,
+			template: '\
+				{{#items}}\
+					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
+				{{/items}}\
+				{{^items}}\
+					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
+				{{/items}}\
+				',
+			templateNoResults: '\
+					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
+				',
 		} );
+		
 	}
 
 	//TODO: instantiate the desired right column elements and connect to the proper element ids

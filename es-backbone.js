@@ -23,7 +23,6 @@ var esbbSearchQueryModel = Backbone.Model.extend({
 			},
 			success: function(json, statusText, xhr) {
 				var data = $.parseJSON( json );
-				//console.log( data );
 				t.resultsModel.hasResults = true;
 				t.resultsModel.hasError = false;
 				t.resultsModel.set( data );
@@ -688,6 +687,10 @@ var esbbSearchFacetSelectView = Backbone.View.extend({
 	},
 
 	initialize: function() {
+		if ( this.options.template )
+			this.template = this.options.template;
+		if ( this.options.templateNoResults )
+			this.templateNoResults = this.options.templateNoResults;
 		this.facetName = this.options.facetName;
 		this.divName = this.options.divName;
 		this.headerName = this.options.headerName;
@@ -766,7 +769,7 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 			this.select_$el.select2('destroy');
 		this.$el.empty();
 	
-		var filters = this.model.getFilters();
+		var filters = this.model.getFilters();console.log(filters);
 		var tags = [];
 		for ( var i in filters ) {
 			if ( typeof filters[i].term != 'undefined' ) {
@@ -991,7 +994,7 @@ var esbbSearchBarView = Backbone.View.extend({
 	buttonText: 'Search',
 	spinner: null,
 	spin_it: false,
-	template: '<p><label>{{headerName}}</label><input class="esbb-search-query" type="text" style="width=500px;"  /><a href="" class="esbb-search-button">{{buttonText}}</a></p>',
+	template: '<p><label>{{headerName}}</label><input class="esbb-search-query" type="text" /><a href="" class="esbb-search-button">{{buttonText}}</a></p>',
 
 	events : {
 		'click .esbb-search-button' : 'search',
@@ -1166,7 +1169,7 @@ var esbbNavigationView = Backbone.View.extend({
 
 		var from = this.model.getFrom();
 		var size = this.model.getSize();
-		console.log(from);
+		//console.log(from);
 		var html = this.headerName + ' ';
 		html += '<a class="esbb-nav-previous" href="">Previous</a> ';
 		html += '<a class="esbb-nav-next" href="">Next</a> ';

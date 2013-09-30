@@ -1,26 +1,26 @@
 <?php
 //TODO: Need includes for Elastica (php library: https://github.com/ruflin/Elastica/)
-include "/var/www/Elastica/Exception/ExceptionInterface.php";
-include "/var/www/Elastica/Exception/ClientException.php";
-include "/var/www/Elastica/Client.php";
-include "/var/www/Elastica/Exception/ResponseException.php";
-include "/var/www/Elastica/Exception/InvalidException.php";
-include "/var/www/Elastica/Exception/ConnectionException.php";
-include "/var/www/Elastica/Exception/Connection/HttpException.php";
-include "/var/www/Elastica/Util.php";
-include "/var/www/Elastica/Response.php";
-include "/var/www/Elastica/Result.php";
-include "/var/www/Elastica/ResultSet.php";
-include "/var/www/Elastica/Param.php";
-include "/var/www/Elastica/Query.php";
-include "/var/www/Elastica/Connection.php";
-include "/var/www/Elastica/SearchableInterface.php";
-include "/var/www/Elastica/Type.php";
-include "/var/www/Elastica/Request.php";
-include "/var/www/Elastica/Search.php";
-include "/var/www/Elastica/Index.php";
-include "/var/www/Elastica/Transport/AbstractTransport.php";
-include "/var/www/Elastica/Transport/Http.php";
+include "/var/www/aginfra/Elastica/Exception/ExceptionInterface.php";
+include "/var/www/aginfra/Elastica/Exception/ClientException.php";
+include "/var/www/aginfra/Elastica/Client.php";
+include "/var/www/aginfra/Elastica/Exception/ResponseException.php";
+include "/var/www/aginfra/Elastica/Exception/InvalidException.php";
+include "/var/www/aginfra/Elastica/Exception/ConnectionException.php";
+include "/var/www/aginfra/Elastica/Exception/Connection/HttpException.php";
+include "/var/www/aginfra/Elastica/Util.php";
+include "/var/www/aginfra/Elastica/Response.php";
+include "/var/www/aginfra/Elastica/Result.php";
+include "/var/www/aginfra/Elastica/ResultSet.php";
+include "/var/www/aginfra/Elastica/Param.php";
+include "/var/www/aginfra/Elastica/Query.php";
+include "/var/www/aginfra/Elastica/Connection.php";
+include "/var/www/aginfra/Elastica/SearchableInterface.php";
+include "/var/www/aginfra/Elastica/Type.php";
+include "/var/www/aginfra/Elastica/Request.php";
+include "/var/www/aginfra/Elastica/Search.php";
+include "/var/www/aginfra/Elastica/Index.php";
+include "/var/www/aginfra/Elastica/Transport/AbstractTransport.php";
+include "/var/www/aginfra/Elastica/Transport/Http.php";
 
 //TODO: define array of ES servers
 global $es_servers;
