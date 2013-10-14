@@ -5,6 +5,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 	query: null,
 	//TODO: define the containing elements you want on the page (define the layout)
 	template: '\
+		<div id="image-header"></div>\
 		<div id="{{prefix}}-header">\
 			<div id="{{prefix}}-search-url"></div>\
 			<div id="{{prefix}}-search-bar"></div>\
@@ -75,7 +76,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div>Authors:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
-					<li><a href="http://localhost/aginfra/snv/snv.php?center={{value}}" target="_blank">{{value}}</a></li>\
+					<li><a href="#" onclick="return openSNV(\'{{value}}\');" target="_blank">{{value}}</a></li>\
 				{{/_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
 			</ul>\
 		</div>\

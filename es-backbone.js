@@ -769,7 +769,7 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 			this.select_$el.select2('destroy');
 		this.$el.empty();
 	
-		var filters = this.model.getFilters();console.log(filters);
+		var filters = this.model.getFilters();
 		var tags = [];
 		for ( var i in filters ) {
 			if ( typeof filters[i].term != 'undefined' ) {

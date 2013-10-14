@@ -7,6 +7,8 @@ body {
 	font-size: 13px;
 	line-height: 18px;
 	color: #333;
+	background: url(../img/background.jpg) repeat-x #557334;
+	margin: 0;
 }
 
 div {
@@ -16,6 +18,8 @@ div {
 
 div#esbb-simple-app {
 	position: relative;
+	width: 980px;			/* aginfra */
+	margin: 0 auto;			/* aginfra */
 }
 
 div#esbb-simple-header {
@@ -32,21 +36,21 @@ div#esbb-simple-left-col, div#esbb-simple-center-col, div#esbb-simple-right-col 
 	-ms-box-sizing:border-box;
 }
 div#esbb-simple-left-col {
-	width: 25%;
+	width: 30%;
 	/*padding: 20px 30px;*/
 	display: block;
 	float: left;
 	border-right: 1px solid #ccc;
 }
 div#esbb-simple-center-col {
-	width: 65%;
+	width: 70%;
 	/*padding: 20px 30px;*/
 	float: left;
 }
 
 div#esbb-simple-right-col {
-	width: 10%;
-	padding: 20px 30px;
+	width: 0;
+	/*padding: 20px 30px;*/
 	display: block;
 	float: left;
 }
@@ -220,4 +224,14 @@ div#esbb-simple-navigation a{
 	border: 1px solid #c9c9c9;
 	border-radius: 5px;
 	padding: 1px 8px;
+}
+
+#image-header{
+	background: url(../img/aginfra_logo.png) no-repeat;
+	height:160px;
+}
+
+.s5_body_background {
+	width: 100%;
+	background: transparent url(../img/aginfra_repeatingdots.png) repeat;
 }

@@ -1,6 +1,6 @@
+<!DOCTYPE HTML>
 <html>
-<body>
-
+<head>
 <!-- TODO: i'm not a designer, you may want to update the style sheet, 
         very basic, please contribute improvements! :) -->
 <link rel="stylesheet" type="text/css" href="css/simple.css?m=2012-06-18" />
@@ -101,7 +101,37 @@ esbbSimpleSearchQuery.index_type = 'aginfra_ds';
 
 <style type="text/css">#wrapper-menu{width:330px;margin:0 auto;}</style>
 
-<div id='esbb-simple-app'></div>	
+
+<link rel="stylesheet" href="windowfiles/dhtmlwindow.css" type="text/css" />
+<script type="text/javascript" src="windowfiles/dhtmlwindow.js"></script>
+<script>
+	function openSNV(center){
+		console.log(center);
+		var googlewin=dhtmlwindow.open("googlebox", "iframe", "http://localhost/aginfra/snv/snvd3.php?center="+center+"&entity=person", "Social Network of "+center, "width=610px,height=370px,resize=1,scrolling=1,center=1,frameborder=0", "recal")
+		/*googlewin.onclose=function(){ //Run custom code when window is being closed (return false to cancel action):
+			return window.confirm("Close window 1?")
+		}*/
+		return false;
+	}
+</script>	
+</head>
+
+
+
+
+<body>
+<div class="s5_body_background">
+	<div id='esbb-simple-app'></div>	
+
+	<!-- aginfra -->
+	<div style="clear:both;"></div>
+	<div style="text-align:center;width:980px;padding:10px;margin:0 auto;">
+		<img src="img/EUflag_logo.jpg">
+		<img src="img/e-infrastructure_logo.jpg">
+		<img src="img/FP7_capacities_logo.jpg">
+	</div>
+</div>
+
 
 <script type="text/javascript">
 	$(document).ready(function() {
