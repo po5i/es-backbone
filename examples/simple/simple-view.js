@@ -51,6 +51,9 @@ var esbbSimpleAppView = Backbone.View.extend({
 			{{#_source.aginfra_eu.lom_general_title_string_type}}\
 				<h4>{{value}}</h4>\
 			{{/_source.aginfra_eu.lom_general_title_string_type}}\
+			{{#_source.aginfra_eu.lom_general_description_string_type}}\
+				<div>{{value}}</div>\
+			{{/_source.aginfra_eu.lom_general_description_string_type}}\
 			\
 			{{#_source.aginfra_eu.lom_technical_location_type}}\
 				<div><a href="{{value}}" target="_blank">{{value}}</a> <img src="img/download.png"></div>\

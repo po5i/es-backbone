@@ -45,9 +45,9 @@ var esbbSimpleSearchQuery = new esbbSearchQueryModel( {
 		filtered : {
 			query : { 
 				query_string: {
-					fields: [ "aginfra_eu.lom_general_title_string_type.value" ],	//"content", "title", "tag"
+					fields: [ "aginfra_eu.lom_general_title_string_type.value","aginfra_eu.lom_lifecycle_contribute_entity_type","aginfra_eu.lom_general_description_string_type" ],	//"content", "title", "tag"
 					query: "",
-					default_operator: "AND"
+					default_operator: "OR"
 			} },
 			filter : {
 				match_all: { }
